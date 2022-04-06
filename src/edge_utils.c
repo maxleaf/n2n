@@ -3023,6 +3023,14 @@ void edge_term (n2n_edge_t * eee) {
     clear_peer_list(&eee->pending_peers);
     clear_peer_list(&eee->known_peers);
 
+    if (eee->conf.allow_routing) {
+        struct host_info *host, *host_tmp;
+        HASH_ITER(hh, eee->known_hosts, host, host_tmp) {   
+            HASH_DEL(eee->known_hosts, host);
+            free(host);
+        }
+    }
+
     eee->transop.deinit(&eee->transop);
     eee->transop_lzo.deinit(&eee->transop_lzo);
 #ifdef HAVE_ZSTD
