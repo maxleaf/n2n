@@ -16,6 +16,9 @@
  *
  */
 
+#ifndef _N2N_DEFINE_H_
+#define _N2N_DEFINE_H_
+
 /* N2N packet header indicators. */
 #define MSG_TYPE_REGISTER                   1
 #define MSG_TYPE_DEREGISTER                 2
@@ -94,12 +97,8 @@
 #define FEDERATION_NAME "*Federation"
 enum federation {IS_NO_FEDERATION = 0,IS_FEDERATION = 1};
 
-/* (un)purgeable community indicator (supernode) */
-#define COMMUNITY_UNPURGEABLE                 0
-#define COMMUNITY_PURGEABLE                   1
-
-/* (un)purgeable supernode indicator */
-enum sn_purge {SN_PURGEABLE = 0, SN_UNPURGEABLE = 1};
+/* (un)purgeable indicator for supernodes, communities, routes, ... */
+enum sn_purge {UNPURGEABLE = 0, PURGEABLE = 1};
 
 /* Header encryption indicators */
 #define HEADER_ENCRYPTION_UNKNOWN             0
@@ -218,4 +217,6 @@ enum skip_add {SN_ADD = 0, SN_ADD_SKIP = 1, SN_ADD_ADDED = 2};
 
 #ifndef min
 #define min(a, b) (((a) >(b)) ? (b) : (a))
+#endif
+
 #endif

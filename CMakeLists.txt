@@ -125,9 +125,6 @@ if(N2N_OPTION_USE_PORTMAPPING)
   add_subdirectory(${THIRD_PARTY_DIR}/libnatpmp libnatpmp)
   link_directories(${PROJECT_BINARY_DIR}/libnatpmp)
 
-  # Turns on the generic code for supporting either of the above
-  ADD_DEFINITIONS("-DHAVE_PORT_FORWARDING")
-
   # TODO:
   # - this is the odd one out, is it needed?
   include_directories(${PROJECT_BINARY_DIR}/lib_miniupnpc)
@@ -190,6 +187,7 @@ add_library(n2n STATIC
         src/aes.c
         src/speck.c
         src/random_numbers.c
+        src/management.c
         src/pearson.c
         src/header_encryption.c
         src/tuntap_freebsd.c
@@ -201,7 +199,8 @@ add_library(n2n STATIC
         src/sn_selection.c
         src/auth.c
         src/curve25519.c
-        src/n2n_port_mapping.c)
+        src/n2n_port_mapping.c
+        src/json.c)
 
 
 if(DEFINED WIN32)
@@ -239,8 +238,7 @@ if(N2N_OPTION_USE_ZSTD)
 endif(N2N_OPTION_USE_ZSTD)
 
 if(N2N_OPTION_USE_CAPLIB)
-  # TODO: this is a static library, shouldnt we have a generic one?
-  target_link_libraries(edge cap.a)
+  target_link_libraries(edge cap)
 endif(N2N_OPTION_USE_CAPLIB)
 
 if(N2N_OPTION_USE_PORTMAPPING)
@@ -260,6 +258,10 @@ add_executable(n2n-benchmark tools/n2n-benchmark.c)
 target_link_libraries(n2n-benchmark n2n)
 add_executable(n2n-keygen tools/n2n-keygen.c)
 target_link_libraries(n2n-keygen n2n)
+add_executable(n2n-route tools/n2n-route.c)
+target_link_libraries(n2n-route n2n)
+add_executable(n2n-portfwd tools/n2n-portfwd.c)
+target_link_libraries(n2n-portfwd n2n)
 
 add_executable(tests-auth tools/tests-auth.c)
 target_link_libraries(tests-auth n2n)

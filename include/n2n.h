@@ -158,9 +158,9 @@
 #include "network_traffic_filter.h"
 #include "auth.h"
 
-#if defined(HAVE_MINIUPNP) || defined(HAVE_NATPMP)
 #include "n2n_port_mapping.h"
-#endif // HAVE_MINIUPNP || HAVE_NATPMP
+
+#include "json.h"
 
 /* ************************************** */
 
@@ -168,11 +168,11 @@
 #include "tf.h"
 
 #ifndef TRACE_ERROR
-#define TRACE_ERROR       0, __FILE__, __LINE__
-#define TRACE_WARNING     1, __FILE__, __LINE__
-#define TRACE_NORMAL      2, __FILE__, __LINE__
-#define TRACE_INFO        3, __FILE__, __LINE__
-#define TRACE_DEBUG       4, __FILE__, __LINE__
+#define TRACE_ERROR       0
+#define TRACE_WARNING     1
+#define TRACE_NORMAL      2
+#define TRACE_INFO        3
+#define TRACE_DEBUG       4
 #endif
 
 /* ************************************** */
@@ -194,7 +194,8 @@ void setUseSyslog (int use_syslog);
 void setTraceFile (FILE *f);
 int getTraceLevel ();
 void closeTraceFile ();
-void traceEvent (int eventTraceLevel, char* file, int line, char * format, ...);
+void _traceEvent (int eventTraceLevel, char* file, int line, char * format, ...);
+#define traceEvent(level, format, ...) _traceEvent(level, __FILE__, __LINE__, format, ##__VA_ARGS__)
 
 /* Tuntap API */
 int tuntap_open (struct tuntap_dev *device, char *dev, const char *address_mode, char *device_ip,
@@ -209,6 +210,7 @@ void tuntap_close (struct tuntap_dev *tuntap);
 void tuntap_get_address (struct tuntap_dev *tuntap);
 
 /* Utils */
+char* inaddrtoa (ipstr_t out, struct in_addr addr);
 char* intoa (uint32_t addr, char* buf, uint16_t buf_len);
 uint32_t bitlen2mask (uint8_t bitlen);
 uint8_t mask2bitlen (uint32_t mask);
